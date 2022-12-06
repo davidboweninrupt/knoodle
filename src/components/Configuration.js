@@ -14,6 +14,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import OneLineForm from "./OneLineForm";
 import Review from "./ConfigReview";
 import SignUpForm from "./SignUpForm";
+import { useBaseUrl } from "../context/BaseUrlContex";
 import { useSnackbar } from "notistack";
 
 const steps = ["Allow access", "Calendar .ics config", "Review"];
@@ -23,6 +24,7 @@ const theme = createTheme();
 export default function Configuration() {
   const [activeStep, setActiveStep] = useState(0);
   const { session } = useSession();
+  const [ baseUrl, setBaseUrl ] = useBaseUrl();
   const webID = session.info.webId;
   const solidFetch = session.fetch;
   const [issuer, setIssuer] = useState("");
@@ -58,7 +60,7 @@ export default function Configuration() {
 
   const getConfigState = async () => {
     const response = await fetch(
-      "/api/config-state?" + new URLSearchParams({ webid: webID }).toString()
+      baseUrl + "/api/config-state?" + new URLSearchParams({ webid: webID }).toString()
     );
     const data = await response.json();
     setConfigStatus({ ...configStatus, ...data });
@@ -74,7 +76,7 @@ export default function Configuration() {
       });
       return;
     }
-    const response = await fetch("/api/update-ics", {
+    const response = await fetch(baseUrl + "/api/update-ics", {
       method: "PUT",
       body: JSON.stringify({
         ics: ics,
@@ -91,7 +93,7 @@ export default function Configuration() {
   };
 
   const revokeAccess = async () => {
-    const response = await fetch("/api/revoke-access", {
+    const response = await fetch(baseUrl + "/api/revoke-access", {
       method: "DELETE",
       body: JSON.stringify({
         webid: webID,
@@ -107,7 +109,7 @@ export default function Configuration() {
   };
 
   const generateToken = async (email, password) => {
-    const response = await fetch("/api/generate-token", {
+    const response = await fetch(baseUrl + "/api/generate-token", {
       method: "POST",
       // The email/password fields are those of your account.
       // The name field will be used when generating the ID of your token.
@@ -136,7 +138,7 @@ export default function Configuration() {
 
   const updateAvailability = async () => {
     setConfigStatus({ ...configStatus, updating: true });
-    const response = await fetch("/api/update-availability", {
+    const response = await fetch(baseUrl + "/api/update-availability", {
       method: "PUT",
       body: JSON.stringify({
         webid: webID,
