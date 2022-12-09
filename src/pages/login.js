@@ -12,7 +12,7 @@ import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 
 const providers = [
-  { title: "Inrupt Pod Spaces", url: "https://broker.pod.inrupt.com/" },
+  { title: "Inrupt PodSpaces", url: "https://login.inrupt.com/" },
   { title: "inrupt.net", url: "https://inrupt.net/" },
   { title: "solidcommunity.net", url: "https://solidcommunity.net/" },
   { title: "Solid Web", url: "https://solidweb.org/" },
